@@ -1,0 +1,27 @@
+{
+    "name": "elplat/kkt-shtrih",
+    "description": "Драйвер ККТ Штрих",
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "php": "^8.1",
+        "psr/log": "^3.0"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.8",
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Elplat\\KktShtrih\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Elplat\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
