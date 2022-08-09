@@ -10,4 +10,17 @@ enum PaymentTypeSign: int
     case PartialPayment = 5; // Частичный расчет и кредит
     case Credit = 6; // Передача в кредит
     case CreditPayment = 7; // Оплата кредита
+
+    public static function fromString(string $str): self
+    {
+        return match ($str) {
+            'full_prepayment' => self::FullPrepayment,
+            'prepayment' => self::Prepayment,
+            'advance' => self::Advance,
+            'full_payment' => self::FullPayment,
+            'partial_payment' => self::PartialPayment,
+            'credit' => self::Credit,
+            'credit_payment' => self::CreditPayment,
+        };
+    }
 }

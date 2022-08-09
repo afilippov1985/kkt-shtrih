@@ -1,11 +1,11 @@
 <?php
 namespace Elplat\KktShtrih\Request;
 
+use Elplat\KktShtrih\TLV;
+
 class FNSendTLV extends AbstractRequest
 {
-    public int $tag;
-
-    public string $value;
+    public TLV $tlv;
 
     public function __construct()
     {
@@ -15,12 +15,10 @@ class FNSendTLV extends AbstractRequest
     public function __toString(): string
     {
         return pack(
-            'nVvva*',
+            'nVa*',
             $this->command,
             $this->password,
-            $this->tag,
-            strlen($this->value),
-            $this->value,
+            (string)$this->tlv,
         );
     }
 }

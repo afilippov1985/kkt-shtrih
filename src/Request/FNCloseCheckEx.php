@@ -78,11 +78,12 @@ class FNCloseCheckEx extends AbstractRequest
     public int $taxType = 0;
 
     /** @var string Текст до 64 символов */
-    public string $stringForPrinting;
+    public string $stringForPrinting = '';
 
     public function __construct()
     {
         $this->command = 0xFF45;
+        $this->responseTimeout = 5000;
     }
 
     public function __toString(): string

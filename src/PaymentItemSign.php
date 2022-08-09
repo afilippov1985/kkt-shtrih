@@ -21,4 +21,27 @@ enum PaymentItemSign: int
     case InsurancePremium = 16; // Страховые взносы
     case SalesTax = 17; // Торговый сбор
     case ResortFee = 18; // Курортный сбор
+
+    public static function fromString(string $str): self
+    {
+        return match ($str) {
+            'commodity' => self::Commodity,
+            'excise' => self::Excise,
+            'job' => self::Job,
+            'service' => self::Service,
+            'gambling_bet' => self::GamblingBet,
+            'gambling_prize' => self::GamblingPrize,
+            'lottery' => self::Lottery,
+            'lottery_prize' => self::LotteryPrize,
+            'intellectual_activity' => self::IntellectualActivity,
+            'payment' => self::Payment,
+            'agent_commission' => self::AgentCommission,
+            'composite' => self::Composite,
+            'another' => self::Another,
+            'property_right' => self::PropertyRight,
+            'non-operating_gain' => self::NonOperatingGain,
+            'insurance_premium' => self::InsurancePremium,
+            'sales_tax' => self::SalesTax,
+        };
+    }
 }

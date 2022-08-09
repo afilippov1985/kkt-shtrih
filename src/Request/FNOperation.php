@@ -1,12 +1,12 @@
 <?php
 namespace Elplat\KktShtrih\Request;
 
-use Elplat\KktShtrih\{Currency, PaymentItemSign, PaymentTypeSign, Quantity};
+use Elplat\KktShtrih\{CheckType, Currency, PaymentItemSign, PaymentTypeSign, Quantity, VatType};
 
 class FNOperation extends AbstractRequest
 {
-    /** @var int Тип операции */
-    public int $checkType = 1;
+    /** @var CheckType Тип операции */
+    public CheckType $checkType;
 
     /** @var float Количество */
     public float $quantity = 1;
@@ -20,8 +20,8 @@ class FNOperation extends AbstractRequest
     /** @var float|null Сумма налога */
     public ?float $taxValue = null;
 
-    /** @var int Налоговая ставка */
-    public int $tax1;
+    /** @var VatType Налоговая ставка */
+    public VatType $tax1 = VatType::None;
 
     public int $department = 1;
 
@@ -44,12 +44,12 @@ class FNOperation extends AbstractRequest
             'nVCa6a5a5a5CCCCa*',
             $this->command,
             $this->password,
-            $this->checkType,
+            $this->checkType->value,
             Quantity::toBinary($this->quantity),
             Currency::toBinary($this->price),
             $this->summ1 === null ? "\xFF\xFF\xFF\xFF\xFF" : Currency::toBinary($this->summ1),
             $this->taxValue === null ? "\xFF\xFF\xFF\xFF\xFF" : Currency::toBinary($this->taxValue),
-            $this->tax1,
+            $this->tax1->value,
             $this->department,
             $this->paymentTypeSign->value,
             $this->paymentItemSign->value,

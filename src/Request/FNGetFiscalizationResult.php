@@ -1,12 +1,11 @@
 <?php
 namespace Elplat\KktShtrih\Request;
 
-class FNOpenSession extends AbstractRequest
+class FNGetFiscalizationResult extends AbstractRequest
 {
     public function __construct()
     {
-        $this->command = 0xFF0B;
-        $this->responseTimeout = 15000;
+        $this->command = 0xFF09;
     }
 
     public function __toString(): string

@@ -1,6 +1,7 @@
 <?php
 namespace Elplat\KktShtrih\Response;
 
+use Elplat\KktShtrih\ECRError;
 use Elplat\KktShtrih\Request\AbstractRequest;
 
 abstract class AbstractResponse
@@ -19,6 +20,7 @@ abstract class AbstractResponse
         0xE0 => OpenSession::class,
         0xFEF3 => Reboot::class,
         0xFF01 => FNGetStatus::class,
+        0xFF09 => FNGetFiscalizationResult::class,
         0xFF0A => FNFindDocument::class,
         0xFF0B => FNOpenSession::class,
         0xFF0C => FNSendTLV::class,
@@ -31,7 +33,6 @@ abstract class AbstractResponse
     ];
 
     public int $command;
-    public int $resultCode = 0;
 
     /** @var int Порядковый номер оператора, чей пароль был введён */
     public int $operatorNumber = 0;
@@ -53,6 +54,12 @@ abstract class AbstractResponse
 
     abstract public static function fromString(string $m): self;
 
+    /**
+     * @param string $m Ответ кассы в бинарном виде
+     * @param AbstractRequest|null $request
+     * @return static
+     * @throws ECRError
+     */
     public static function decode(string $m, ?AbstractRequest $request = null): self
     {
         if ($m[0] === "\xFF") {
@@ -66,15 +73,12 @@ abstract class AbstractResponse
         $command = $a['Command'];
         $resultCode = $a['ResultCode'];
 
-        if ($command === 0xFE && $request !== null && ($request->command & 0xFE00) === 0xFE00) {
-            $command = $request->command;
+        if ($command === 0xFE && $request !== null && ($request->getCommand() & 0xFE00) === 0xFE00) {
+            $command = $request->getCommand();
         }
 
         if ($resultCode) {
-            $response = new Error();
-            $response->command = $command;
-            $response->resultCode = $resultCode;
-            return $response;
+            throw new ECRError($command, $resultCode);
         }
 
         $responseClass = self::COMMAND_TO_CLASS[$command] ?? Unknown::class;
@@ -82,7 +86,6 @@ abstract class AbstractResponse
         $response = call_user_func([$responseClass, 'fromString'], $m);
 
         $response->command = $command;
-        $response->resultCode = $resultCode;
         return $response;
     }
 }
